@@ -1,2 +1,2 @@
 # MFINet
-The code will be available online once the paper is accepted!
+The code is on the way ........
