@@ -64,7 +64,7 @@ class Multi_attention_Model(nn.Module):
         self.lxmert_config = LxmertConfig()
         self.lxmert_xlayer = LxmertXLayer(self.lxmert_config)
 
-    def forward(self, x, seg_features, texts, is_mask=False, contrast=False, mask_texts = [], mask_words = [], naive_contrast = False, whole_semantic=None, con_labels=[],mask_indexs = None, batch_target=None,semantic_deal=None,do_predict=False,texts_label=[],mask_for_predict_dict=[],impath=[],texts_label_withpro=[]):
+    def forward(self, x, seg_features, texts, whole_semantic=None, con_labels=[],mask_indexs = None, batch_target=None,semantic_deal=None,do_predict=False,texts_label=[],impath=[],texts_label_withpro=[]):
         image_embedding = self.linear(self.deit(x).logits).unsqueeze(1)  
 
         inputs = self.tokenizer.batch_encode_plus(
@@ -78,48 +78,6 @@ class Multi_attention_Model(nn.Module):
             add_special_tokens=True
         )  
         label = inputs.input_ids.cuda()
-
-        if contrast:
-            for i, word in enumerate(mask_words):
-                texts[i] = texts[i].replace('[MASK]', len(self.tokenizer.tokenize(word)) * '[MASK]')
-            inputs_tmp = self.tokenizer.batch_encode_plus(
-                texts,
-                padding=True,
-                max_length = self.max_len,
-                truncation=True,
-                return_tensors="pt",
-                return_token_type_ids = True,
-                return_attention_mask = True,
-                add_special_tokens=True
-            )
-            mask_matrix = np.where(inputs_tmp.input_ids == 103)
-            for i, word in enumerate(mask_words):
-                if i != 0:
-                    texts[i] = texts[i].replace(len(self.tokenizer.tokenize(word)) * '[MASK]', word)
-            inputs = self.tokenizer.batch_encode_plus(
-                texts,
-                padding=True,
-                max_length = self.max_len,
-                truncation=True,
-                return_tensors="pt",
-                return_token_type_ids = True,
-                return_attention_mask = True,
-                add_special_tokens=True
-            )
-
-        if is_mask:
-            for i, word in enumerate(mask_words):
-                mask_texts[i] = mask_texts[i].replace('[MASK]', len(self.tokenizer.tokenize(word)) * '[MASK]')
-            inputs = self.tokenizer.batch_encode_plus(
-                mask_texts,
-                padding=True,
-                max_length = self.max_len,
-                truncation=True,
-                return_tensors="pt",
-                return_token_type_ids = True,
-                return_attention_mask = True,
-                add_special_tokens=True
-            )
 
         inputs.attention_mask = inputs.attention_mask.cuda() 
         inputs.input_ids = inputs.input_ids.cuda()      
@@ -148,39 +106,8 @@ class Multi_attention_Model(nn.Module):
             )
             lang_feats, visual_feats = x_outputs[:2]
 
-        loss_mask = 0.
-        if is_mask == True:
-            output_mask = self.cls(lang_feats)
-            for i in range(len(texts)):
-                loss_mask = loss_mask + self.criterion(output_mask[i], label[i]) * semantic_deal[batch_target[i]][mask_indexs[i]] * 3
-        
-        # contrast loss
-        if contrast:  
-            ori_embedding = self.contrast_proj(torch.mean(lang_feats[0][mask_matrix[1][np.where(mask_matrix[0]==0)[0]]],dim=0).unsqueeze(0))
-            pos_embedding = self.contrast_proj(torch.mean(lang_feats[1][mask_matrix[1][np.where(mask_matrix[0]==1)[0]]],dim=0).unsqueeze(0))
-            for j in range(2, len(texts)):
-                neg = self.contrast_proj(torch.mean(lang_feats[j][mask_matrix[1][np.where(mask_matrix[0]==j)[0]]],dim=0).unsqueeze(0))
-                if j == 2:
-                    neg_embedding = neg
-                else:
-                    neg_embedding = torch.cat((neg_embedding, neg), 0)
-            # positive logits: Nx1
-            l_pos = torch.einsum('nc,nc->n', [ori_embedding, pos_embedding]).unsqueeze(-1)
-            # negative logits: NxK
-            l_neg = torch.einsum('nc,ck->nk', [ori_embedding, neg_embedding.t()])
-            # logits: Nx(1+K)
-            logits = torch.cat([l_pos, l_neg], dim=1) 
-            # labels: positive key indicators
-            labels = torch.zeros(logits.shape[0], dtype=torch.long).cuda()
-            # compute output
-            loss = self.criterion(logits, labels)
-            return loss
-        
-        if naive_contrast == True:
-            feature = visual_feats[:, 0, :]
-            logits, labels = self.info_nce_loss(feature, con_labels)
-            constract_loss = self.criterion(logits, labels)
-            return constract_loss
+        loss_mask = 0.      
+    
 
         image_embedding_class = visual_feats[:, 0, :]
         pre_semantic = self.fc_image(image_embedding_class)
