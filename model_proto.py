@@ -35,13 +35,7 @@ class Multi_attention_Model(nn.Module):
         self.min_max_scaler = preprocessing.MinMaxScaler() 
         self.linear = nn.Linear(1000,768)
         self.max_len = opt.max_length
-        if opt.dataset == "CUB":
-            self.fc_image = nn.Linear(768,312)
-        elif opt.dataset == "AWA2":
-            self.fc_image = nn.Linear(768,85)
-        elif opt.dataset == "SUN":
-            self.fc_image = nn.Linear(768,102)  
-        elif opt.dataset == "RSSDIVCS" or opt.dataset == "mymars":
+        if opt.dataset == "RSSDIVCS":
             if opt.class_embedding == "w2v":
                 self.fc_image = nn.Linear(768,300)
             elif opt.class_embedding == "bert":
@@ -53,13 +47,8 @@ class Multi_attention_Model(nn.Module):
         self.config = BertConfig()
         self.cls = BertOnlyMLMHead(self.config)
         
-        if opt.dataset == "AWA2" or opt.dataset == "CUB" or opt.dataset == "RSSDIVCS":
+        if opt.dataset == "RSSDIVCS":
             self.deit = DeiTForImageClassification.from_pretrained("/work/deit-base-distilled-patch16-224")
-            # print(self.deit)
-            # exit()
-        elif opt.dataset == "SUN":
-            self.deit = SwinForImageClassification.from_pretrained("/work/swin")
-
 
         self.lxmert_config = LxmertConfig()
         self.lxmert_xlayer = LxmertXLayer(self.lxmert_config)
