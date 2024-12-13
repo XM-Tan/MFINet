@@ -51,15 +51,6 @@ def get_opt():
     parser.add_argument('--calibrated_stacking', type=float, default=False,
                         help='calibrated_stacking, shrinking the output score of seen classes')
 
-    # # about calculating IoU
-    # parser.add_argument('--save_att', default=False, help='./visualize_IoU/00/')
-    # parser.add_argument('--IoU_scale', type=int, default=4)  # The scale of IoU bounding box
-    # parser.add_argument('--IoU_thr', type=float, default=0.5)
-    # parser.add_argument('--resize_WH', action='store_true', default=False)
-    # parser.add_argument('--out_of_edge', action='store_true', default=False)
-    # parser.add_argument('--max_area_center', action='store_true', default=False)
-    # parser.add_argument('--KNOW_BIRD_BB', action='store_true', default=False)
-
     # for distributed loader
     parser.add_argument('--train_mode', type=str, default='random', help='loader: random or distributed')
     parser.add_argument('--n_batch', type=int, default=1000, help='batch numbers per epoch')
@@ -67,17 +58,12 @@ def get_opt():
     parser.add_argument('--shots', type=int, default=2, help='image numbers per class')
 
     parser.add_argument('--transform_complex', action='store_true', default=False, help='complex transform')
-    # # additional for SUN and AWA
-    # parser.add_argument('--awa_finetune', action='store_true', default=False)
-    # parser.add_argument('--use_group', action='store_true', default=False)
-    # parser.add_argument('--avg_pool', action='store_true', default=False)
     # evaluation
     parser.add_argument('--only_evaluate', action='store_true', default=False)
     parser.add_argument('--resume', default=False)
 
-    # hyf 添加
+    
     parser.add_argument('--patient', type=int, default=10)
-    # parser.add_argument('--mask_way', type=str, default="oldmask")
     parser.add_argument('--temperature', type=float, default=0.05)
     parser.add_argument('--loss_function', type=str, default="L2", help="the type of loss function")
     parser.add_argument('--model_name', type=str, default="baseline", help="baseline,softmax,sigmoid,relu")
@@ -93,7 +79,6 @@ def get_opt():
     # tan添加
     parser.add_argument('--seen_unseen_ratio', type=int, default=6010)
     parser.add_argument('--random_num', type=int, default=1)
-    # parser.add_argument('--ablation_num', type=int, default=6)
 
     opt = parser.parse_args()
     opt.dataroot = opt.root + 'data'
