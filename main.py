@@ -171,10 +171,7 @@ def main():
                 if (i_realindex + 1) != batch and key == 1:
                     continue
 
-                if ((opt.dataset == "SUN") and (((i_realindex + 1) == batch) or((epoch>=5) and (i_realindex +1) == 644)))  \
-                    or ((opt.dataset == "AWA2") and (((i_realindex + 1) == batch) or (((epoch * batch + i_realindex + 1) >= 1000) and ((i_realindex + 1) % (20 * opt.gradient_time) == 0) and (key == 0)))) \
-                    or ((opt.dataset == "CUB") and (((i_realindex + 1) == batch) or((epoch>=5) and (i_realindex +1) == batch/2/opt.gradient_time*opt.gradient_time))) \
-                    or ((opt.dataset == "RSSDIVCS") and (((i_realindex + 1) == batch) or((epoch>=5) and (i_realindex +1) == batch/2/opt.gradient_time*opt.gradient_time))):
+                if ((opt.dataset == "RSSDIVCS") and (((i_realindex + 1) == batch) or((epoch>=5) and (i_realindex +1) == batch/2/opt.gradient_time*opt.gradient_time))):
                     logger.info('\n[Epoch %d, Batch %5d] Train loss: %.3f '% (epoch+1, batch, loss_log['ave_loss'] / batch))
                     model_baseline.eval()
 
