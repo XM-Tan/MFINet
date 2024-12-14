@@ -1,5 +1,5 @@
 # MFINet
-# This repo is built for the paper: A Novel Zero-Shot Remote Sensing Scene Classification Network Based on Multimodal Feature Interaction [paper](https://doi.org/10.1109/JSTARS.2024.3414499)
+# This repo is built for the paper: A Novel Zero-Shot Remote Sensing Scene Classification Network Based on Multimodal Feature Interaction [<a href="https://doi.org/10.1109/JSTARS.2024.3414499">Paper</a>]
 # Citation
 If it is helpful for your work, please cite this paper:
 ``` 
