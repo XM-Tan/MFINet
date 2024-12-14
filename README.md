@@ -1,5 +1,16 @@
 # MFINet
 # This repo is built for the paper: A Novel Zero-Shot Remote Sensing Scene Classification Network Based on Multimodal Feature Interaction [<a href="https://doi.org/10.1109/JSTARS.2024.3414499">Paper</a>]
+
+# Getting Started
+## Installation
+### Step 1: Clone the MFINet repository:
+To get started, first clone the MFINet repository and navigate to the project directory:
+'''
+git clone https://github.com/XM-Tan/MFINet.git
+cd MFINet
+'''
+
+
 # Citation
 If it is helpful for your work, please cite this paper:
 ``` 
