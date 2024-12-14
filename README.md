@@ -5,10 +5,10 @@
 ## Installation
 ### Step 1: Clone the MFINet repository:
 To get started, first clone the MFINet repository and navigate to the project directory:
-'''
+```
 git clone https://github.com/XM-Tan/MFINet.git
 cd MFINet
-'''
+```
 
 
 # Citation
