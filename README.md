@@ -2,6 +2,9 @@
 ## This repo is built for the paper: A Novel Zero-Shot Remote Sensing Scene Classification Network Based on Multimodal Feature Interaction 
 ### [<a href="https://doi.org/10.1109/JSTARS.2024.3414499">Paper</a>]
 
+# Abstract
+Zero-shot classification models aim to recognize image categories that are not included in the training phase by learning seen scenes with semantic information. This approach is particularly useful in remote sensing since it can identify previously unseen classes. However, most zero-shot remote sensing scene classification approaches focus on matching visual and semantic features, while disregarding the importance of visual feature extraction, especially regarding local-global joint information. Furthermore, the visual and semantic relationships have not been thoroughly investigated due to the separate analysis of these features. To address these issues, we propose a novel zero-shot remote sensing scene classification network based on multimodal feature interaction (MFINet). Specifically, the MFINet deploys hybrid image feature extraction networks, combining convolutional neural networks and an improved Transformer, to capture local discriminant information and long-range contextual information, respectively. Notably, we design a crossmodal feature fusion (CMFF) module to facilitate the multimodal feature interaction, thereby enhancing relevant information in both the visual and semantic domains.
+
 # Getting Started
 ## Installation
 ### Step 1: Clone the MFINet repository:
